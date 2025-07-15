@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         maven "M3"
+        jdk "java"
     }
 
     environment {
@@ -18,7 +19,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'sudo docker build -t demo:v1 .'
+                sh ' docker build -t demo:v1 .'
             }
         }
 
