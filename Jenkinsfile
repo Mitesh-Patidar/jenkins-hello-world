@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t demo:v1 .'
+                sh 'sudo docker build -t demo:v1 .'
             }
         }
 
@@ -26,8 +26,8 @@ pipeline {
             steps {
                 sh '''
                     echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin
-                    docker tag demo:v1 "$DOCKER_CREDS_USR/demo:v1"
-                    docker push "$DOCKER_CREDS_USR/demo:v1"
+                    sudo docker tag demo:v1 "$DOCKER_CREDS_USR/demo:v1"
+                    sudo docker push "$DOCKER_CREDS_USR/demo:v1"
                 '''
             }
         }
