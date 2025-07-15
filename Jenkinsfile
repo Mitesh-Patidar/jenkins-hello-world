@@ -12,7 +12,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                git 'https://github.com/yechuri-github64/jenkins-hello-world.git'
                 sh "mvn clean package -DskipTests=true"
             }
         }
