@@ -1,35 +1,39 @@
 pipeline {
-    agent any
-
-    tools {
-        maven "M3"
-        jdk "JDK"
-    }
+    agent { label 'jenkins-agent' }
 
     environment {
-        DOCKER_CREDS = credentials('demo') // Use only once
+        DOCKER_HUB_USER = 'miteshpatidar25'
+        IMAGE_NAME = 'jenkins-hello-world'
+        IMAGE_TAG = 'latest'
     }
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                sh "mvn clean package -DskipTests=true"
+                git 'https://github.com/Mitesh-Patidar/jenkins-hello-world.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh ' docker build -t demo:v1 .'
+                script {
+                    docker.build("${DOCKER_HUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}")
+                }
             }
         }
 
-        stage('Docker Login & Push') {
+        stage('Push to DockerHub') {
             steps {
-                sh '''
-                    echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin
-                    sudo docker tag demo:v1 "$DOCKER_CREDS_USR/demo:v1"
-                    sudo docker push "$DOCKER_CREDS_USR/demo:v1"
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG
+                    '''
+                }
             }
         }
     }
