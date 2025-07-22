@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = 'jenkins-hello-world'
         IMAGE_TAG = 'latest'
     }
-
+    stages {
         stage('Build Docker Image') {
             steps {
                 script {
