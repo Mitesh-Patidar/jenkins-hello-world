@@ -7,13 +7,6 @@ pipeline {
         IMAGE_TAG = 'latest'
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Mitesh-Patidar/jenkins-hello-world.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
