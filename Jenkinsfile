@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'jenkins-agent' }
+    agent { label 'agent' }
 
     environment {
         DOCKER_HUB_USER = 'miteshpatidar25'
